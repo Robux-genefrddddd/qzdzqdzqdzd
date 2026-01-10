@@ -54,69 +54,77 @@ export default function GroupDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border/20 bg-card/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center gap-4 mb-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate("/groups")}
-            >
-              <ArrowLeft size={16} className="mr-2" />
-              Back
-            </Button>
-          </div>
-
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{group.name}</h1>
-            <p className="text-muted-foreground mt-2">{group.description}</p>
-            <p className="text-sm text-muted-foreground mt-2">
-              {group.memberCount}{" "}
-              {group.memberCount === 1 ? "member" : "members"}
-            </p>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header - Compact */}
+      <div className="border-b border-border/30 bg-card/50">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <button
+                onClick={() => navigate("/groups")}
+                className="p-1.5 hover:bg-secondary/50 rounded-lg transition-colors flex-shrink-0"
+              >
+                <ArrowLeft size={16} />
+              </button>
+              <div className="min-w-0">
+                <h1 className="text-base font-bold text-foreground truncate">
+                  {group.name}
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  {group.memberCount} {group.memberCount === 1 ? "member" : "members"}
+                </p>
+              </div>
+            </div>
+            {group.description && (
+              <p className="text-xs text-muted-foreground hidden sm:block max-w-xs text-right truncate">
+                {group.description}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex gap-4 border-b border-border/20 mt-6 mb-6">
-          <button
-            onClick={() => setActiveTab("chat")}
-            className={`pb-4 px-2 font-medium transition-colors ${
-              activeTab === "chat"
-                ? "text-primary border-b-2 border-primary"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Chat
-          </button>
-          <button
-            onClick={() => setActiveTab("members")}
-            className={`pb-4 px-2 font-medium transition-colors ${
-              activeTab === "members"
-                ? "text-primary border-b-2 border-primary"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Members
-          </button>
+      {/* Tabs - Compact */}
+      <div className="border-b border-border/20 bg-background/50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex gap-0">
+            <button
+              onClick={() => setActiveTab("chat")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "chat"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Chat
+            </button>
+            <button
+              onClick={() => setActiveTab("members")}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "members"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Members
+            </button>
+          </div>
         </div>
+      </div>
 
-        {/* Tab Content */}
-        <div className="pb-12">
-          {activeTab === "chat" && (
-            <div className="h-[600px]">
-              <GroupChat groupId={group.id} />
-            </div>
-          )}
+      {/* Tab Content - Full Height */}
+      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-4 py-4">
+        {activeTab === "chat" && (
+          <div className="h-full">
+            <GroupChat groupId={group.id} />
+          </div>
+        )}
 
-          {activeTab === "members" && (
+        {activeTab === "members" && (
+          <div className="overflow-y-auto">
             <GroupMembers group={group} isAdmin={isAdmin} />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
