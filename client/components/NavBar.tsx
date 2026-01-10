@@ -588,17 +588,17 @@ export function NavBar() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 }}
-                      className="border-t border-border/20 px-4 py-4"
+                      className="border-t border-border/10 px-3 py-3 mt-auto"
                     >
                       <button
                         onClick={() => {
                           handleLogout();
                           closeMenu();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-destructive/20 transition-colors duration-150 text-destructive group"
+                        className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors duration-150 group"
                       >
-                        <LogOut size={18} className="text-destructive" />
-                        <span className="text-sm font-medium">Sign Out</span>
+                        <LogOut size={16} className="text-muted-foreground flex-shrink-0" />
+                        <span className="font-medium">Sign Out</span>
                       </button>
                     </motion.div>
                   )}
@@ -607,18 +607,18 @@ export function NavBar() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.45 }}
-                    className="border-t border-border/20 px-4 py-4 flex justify-center"
+                    className="border-t border-border/10 px-3 py-3 flex justify-center"
                   >
                     <a
                       href="https://roblox.com"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="opacity-50 hover:opacity-100 transition-opacity"
+                      className="opacity-40 hover:opacity-70 transition-opacity"
                     >
                       <img
                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Roblox_Logo.svg/2048px-Roblox_Logo.svg.png"
                         alt="Roblox"
-                        className="h-4 object-contain"
+                        className="h-3.5 object-contain"
                       />
                     </a>
                   </motion.div>
