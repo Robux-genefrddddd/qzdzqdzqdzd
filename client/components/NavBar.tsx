@@ -536,7 +536,7 @@ export function NavBar() {
                             className="px-4 py-6 border-t border-blue-500/10"
                           >
                             <p className="text-xs font-semibold text-amber-500/70 uppercase tracking-wider mb-4 px-2">
-                              Admin
+                              ⚡ Admin
                             </p>
                             <motion.div
                               custom={7}
@@ -549,17 +549,18 @@ export function NavBar() {
                                 className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-500/5 hover:from-amber-500/30 hover:to-amber-500/10 transition-all duration-200 font-semibold text-amber-400 border border-amber-500/20 group"
                                 onClick={closeMenu}
                               >
-                                <span className="text-xl group-hover:scale-110 transition-transform">
-                                  ⚙️
+                                <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                                  🎛️
                                 </span>
-                                <div>
+                                <div className="flex-1">
                                   <div className="text-sm font-bold">
                                     Admin Panel
                                   </div>
                                   <div className="text-xs text-amber-300/60">
-                                    Manage
+                                    Control center
                                   </div>
                                 </div>
+                                <span className="text-xs text-slate-600">→</span>
                               </Link>
                             </motion.div>
                           </motion.div>
