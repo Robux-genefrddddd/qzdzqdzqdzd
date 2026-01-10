@@ -128,6 +128,19 @@ export default function Dashboard() {
     }
   };
 
+  const handleCancelScheduledUpload = async (uploadId: string) => {
+    try {
+      await cancelScheduledUpload(uploadId);
+      setScheduledUploads(
+        scheduledUploads.filter((u) => u.id !== uploadId),
+      );
+      toast.success("Scheduled upload cancelled");
+    } catch (error) {
+      toast.error("Failed to cancel scheduled upload");
+      console.error(error);
+    }
+  };
+
   const stats = {
     totalEarnings: assets.reduce(
       (sum, asset) => sum + (asset.price || 0) * asset.downloads,
