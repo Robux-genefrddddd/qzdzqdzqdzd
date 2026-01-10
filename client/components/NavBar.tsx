@@ -12,16 +12,16 @@ export function NavBar({ isAuthenticated = false, user, onLogout }: NavBarProps)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/50">
+    <nav className="sticky top-0 z-50 bg-background/98 backdrop-blur-md border-b border-border/30">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 bg-accent rounded-sm flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
                 <span className="font-bold text-primary-foreground text-sm">a</span>
               </div>
-              <span className="font-semibold text-sm hidden sm:inline tracking-tight">AssetHub</span>
+              <span className="font-bold text-base hidden sm:inline tracking-tight">AssetHub</span>
             </div>
           </Link>
 
