@@ -44,21 +44,21 @@ export function NavBar({ isAuthenticated = false, user, onLogout }: NavBarProps)
           {/* Auth Section */}
           <div className="flex items-center gap-3">
             {isAuthenticated && user ? (
-              <div className="hidden sm:flex items-center gap-2">
-                <button className="p-1.5 text-foreground/70 hover:text-foreground transition-colors hover:bg-secondary rounded-sm">
+              <div className="hidden sm:flex items-center gap-3">
+                <button className="p-2 text-foreground/70 hover:text-foreground transition-colors hover:bg-secondary/50 rounded-lg">
                   <User size={18} />
                 </button>
                 <Link
                   to="/dashboard"
-                  className="px-3 py-1.5 text-foreground/80 hover:text-foreground transition-colors font-medium text-xs"
+                  className="px-4 py-2 text-foreground/80 hover:text-foreground transition-colors font-medium text-sm rounded-lg hover:bg-secondary/50"
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={onLogout}
-                  className="flex items-center gap-1.5 px-3 py-1.5 text-foreground/80 hover:text-foreground bg-secondary/50 hover:bg-secondary border border-border/50 rounded-sm transition-colors text-xs font-medium"
+                  className="flex items-center gap-1.5 px-4 py-2 text-foreground/80 hover:text-foreground bg-secondary/50 hover:bg-secondary border border-border/50 rounded-lg transition-colors text-sm font-medium"
                 >
-                  <LogOut size={14} />
+                  <LogOut size={16} />
                   Logout
                 </button>
               </div>
@@ -66,13 +66,13 @@ export function NavBar({ isAuthenticated = false, user, onLogout }: NavBarProps)
               <div className="hidden sm:flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 text-foreground/70 hover:text-foreground font-medium text-xs"
+                  className="px-4 py-2 text-foreground/70 hover:text-foreground font-medium text-sm rounded-lg hover:bg-secondary/50 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3 py-1.5 bg-primary text-primary-foreground font-medium text-xs rounded-sm hover:opacity-90 transition-all"
+                  className="px-5 py-2 bg-primary text-primary-foreground font-semibold text-sm rounded-lg hover:opacity-90 transition-all shadow-md"
                 >
                   Sign Up
                 </Link>
