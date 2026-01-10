@@ -88,6 +88,12 @@ export function NavBar() {
               Marketplace
             </Link>
             <Link
+              to="/support"
+              className="text-foreground/80 hover:text-foreground transition-colors text-sm font-medium"
+            >
+              Support
+            </Link>
+            <Link
               to="/about"
               className="text-foreground/80 hover:text-foreground transition-colors text-sm font-medium"
             >
