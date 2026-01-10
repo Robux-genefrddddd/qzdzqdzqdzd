@@ -22,19 +22,31 @@ function RoleBadge({ role }: { role?: string }) {
 
   if (role === "founder") {
     return (
-      <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/20 rounded-lg">
-        <Crown size={14} className="text-yellow-400" />
-        <span className="text-xs font-semibold text-yellow-400">Founder</span>
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="p-1 hover:scale-110 transition-transform cursor-help">
+            <Crown size={16} className="text-yellow-400" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="text-xs">
+          Founder
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
   if (role === "admin") {
     return (
-      <div className="flex items-center gap-1 px-2 py-1 bg-red-500/20 rounded-lg">
-        <Shield size={14} className="text-red-400" />
-        <span className="text-xs font-semibold text-red-400">Admin</span>
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="p-1 hover:scale-110 transition-transform cursor-help">
+            <Shield size={16} className="text-red-400" />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="text-xs">
+          Admin
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
@@ -45,7 +57,7 @@ function RoleBadge({ role }: { role?: string }) {
           <img
             src="https://cdn3.emoji.gg/emojis/42747-roblox-verified.png"
             alt="Partner"
-            className="w-3.5 h-3.5 hover:scale-110 transition-transform cursor-help"
+            className="w-4 h-4 hover:scale-110 transition-transform cursor-help"
           />
         </TooltipTrigger>
         <TooltipContent side="bottom" className="text-xs">
