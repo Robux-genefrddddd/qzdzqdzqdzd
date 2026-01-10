@@ -513,74 +513,28 @@ export default function AssetDetail() {
           </div>
         </div>
 
-        {/* Description & Creator */}
-        <div className="bg-secondary/15 border border-border/15 rounded-lg p-6 space-y-6">
-          {/* Description */}
-          <div>
-            <h2 className="text-lg font-bold mb-3">About This Asset</h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {asset.description}
-            </p>
-          </div>
+        {/* About Section */}
+        <div className="mb-8">
+          <h2 className="text-sm font-semibold uppercase text-muted-foreground mb-3">
+            About
+          </h2>
+          <p className="text-sm text-foreground/85 leading-relaxed max-w-3xl">
+            {asset.description}
+          </p>
 
           {/* Tags */}
           {asset.tags && asset.tags.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-3 text-sm">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {asset.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-lg"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {asset.tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-2.5 py-1 bg-primary/10 text-primary text-xs rounded-md font-medium"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           )}
-
-          {/* Creator Section */}
-          <div className="pt-4 border-t border-border/20">
-            <h3 className="font-semibold mb-4 text-sm">Creator</h3>
-            {authorProfile ? (
-              <div className="flex items-center justify-between p-4 bg-background/50 border border-border/30 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={
-                      authorProfile.profileImage ||
-                      `https://api.dicebear.com/7.x/avataaars/svg?seed=${authorProfile.username}`
-                    }
-                    alt={authorProfile.username}
-                    className="w-12 h-12 rounded-lg object-cover"
-                  />
-                  <div>
-                    <p className="font-semibold text-sm text-foreground">
-                      {authorProfile.displayName}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      @{authorProfile.username}
-                    </p>
-                    {authorProfile.role && (
-                      <span className="inline-block mt-1 px-2 py-0.5 bg-primary/20 text-primary text-xs rounded capitalize">
-                        {authorProfile.role}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <Link
-                  to={`/creator/${authorProfile.uid}`}
-                  className="text-accent hover:text-accent/80 text-sm font-medium"
-                >
-                  View Profile
-                </Link>
-              </div>
-            ) : (
-              <div className="p-4 bg-background/50 border border-border/30 rounded-lg text-muted-foreground text-sm">
-                Creator information unavailable
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Reviews Section */}
