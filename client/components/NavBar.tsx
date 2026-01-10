@@ -154,6 +154,19 @@ export function NavBar() {
                         Upload Asset
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/groups" className="cursor-pointer">
+                        <Users size={16} className="mr-2" />
+                        Groups
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/messages" className="cursor-pointer">
+                        <Mail size={16} className="mr-2" />
+                        Messages
+                      </Link>
+                    </DropdownMenuItem>
                     {(userProfile.role === "founder" ||
                       userProfile.role === "admin") && (
                       <>
