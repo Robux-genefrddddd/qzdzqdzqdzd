@@ -35,6 +35,7 @@ export async function registerUser(
   password: string,
   username: string,
   displayName: string,
+  role: "member" | "partner" | "admin" | "founder" | "support" = "member",
 ): Promise<UserProfile> {
   try {
     // Create auth user
@@ -60,9 +61,11 @@ export async function registerUser(
       profileImage: DEFAULT_PROFILE_IMAGE,
       createdAt: new Date(),
       memberRank: "starter",
+      role,
       assetsCreated: 0,
       assetsDownloaded: 0,
       earnings: 0,
+      isBanned: false,
     };
 
     await setDoc(doc(db, "users", user.uid), userProfile);
