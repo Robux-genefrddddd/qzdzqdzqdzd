@@ -25,7 +25,7 @@ export function NavBar({
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Roblox_Logo.svg/2048px-Roblox_Logo.svg.png"
                 alt="Roblox"
-                className="h-7 object-contain"
+                className="h-5 object-contain"
               />
               <span className="font-bold text-sm hidden sm:inline tracking-tight text-foreground">
                 AssetHub
