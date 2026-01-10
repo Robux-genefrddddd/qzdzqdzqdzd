@@ -441,6 +441,65 @@ export default function AdminPanel() {
               )}
             </div>
           </div>
+        ) : activeTab === "messages" && userProfile?.role === "founder" ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Broadcast Messages</h3>
+              <Button
+                onClick={() => setShowBroadcastModal(true)}
+                className="gap-2"
+              >
+                <Mail size={16} />
+                Send Message
+              </Button>
+            </div>
+
+            {broadcastMessages.length === 0 ? (
+              <div className="text-center py-12">
+                <Mail
+                  size={40}
+                  className="mx-auto text-muted-foreground mb-4"
+                />
+                <p className="text-muted-foreground">No messages sent yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {broadcastMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className="p-4 bg-card border border-border/30 rounded-xl hover:border-border/60 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="font-semibold text-foreground">
+                          {msg.title}
+                        </p>
+                        <p className="text-sm text-foreground/80 mt-2 leading-relaxed">
+                          {msg.message}
+                        </p>
+                        <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                          <span>
+                            {msg.recipientType === "all"
+                              ? `Sent to all ${users.length} users`
+                              : `Sent to ${msg.recipientIds?.length || 0} users`}
+                          </span>
+                          <span>
+                            {new Date(msg.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteBroadcastMessage(msg.id)}
+                        className="p-1 hover:bg-destructive/20 rounded transition-colors"
+                      >
+                        <X size={16} className="text-destructive" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         ) : activeTab === "maintenance" && userProfile?.role === "founder" ? (
           <div className="space-y-6">
             <div className="p-6 bg-card border border-border/30 rounded-xl">
