@@ -54,30 +54,30 @@ export default function GroupDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="bg-background flex flex-col">
       {/* Header - Compact */}
       <div className="border-b border-border/30 bg-card/50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
+        <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => navigate("/groups")}
-                className="p-1.5 hover:bg-secondary/50 rounded-lg transition-colors flex-shrink-0"
+                className="p-1.5 hover:bg-secondary/50 rounded-lg flex-shrink-0"
               >
                 <ArrowLeft size={16} />
               </button>
               <div className="min-w-0">
-                <h1 className="text-base font-bold text-foreground truncate">
+                <h1 className="text-sm font-bold text-foreground truncate">
                   {group.name}
                 </h1>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground/70">
                   {group.memberCount}{" "}
                   {group.memberCount === 1 ? "member" : "members"}
                 </p>
               </div>
             </div>
             {group.description && (
-              <p className="text-xs text-muted-foreground hidden sm:block max-w-xs text-right truncate">
+              <p className="text-xs text-muted-foreground/60 hidden sm:block max-w-xs text-right truncate">
                 {group.description}
               </p>
             )}
@@ -87,11 +87,11 @@ export default function GroupDetail() {
 
       {/* Tabs - Compact */}
       <div className="border-b border-border/20 bg-background/50">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-5xl mx-auto px-4">
           <div className="flex gap-0">
             <button
               onClick={() => setActiveTab("chat")}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
                 activeTab === "chat"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -101,7 +101,7 @@ export default function GroupDetail() {
             </button>
             <button
               onClick={() => setActiveTab("members")}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
                 activeTab === "members"
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -114,7 +114,7 @@ export default function GroupDetail() {
       </div>
 
       {/* Tab Content - Full Height */}
-      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-4 py-4">
+      <div className="flex-1 overflow-hidden max-w-5xl w-full mx-auto px-4 py-3">
         {activeTab === "chat" && (
           <div className="h-full">
             <GroupChat groupId={group.id} />

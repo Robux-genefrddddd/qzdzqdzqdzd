@@ -77,7 +77,7 @@ const BanGuard = ({ children }: { children: ReactNode }) => {
 };
 
 const Layout = ({ children }: { children: React.ReactNode }) => (
-  <div className="min-h-screen flex flex-col">
+  <div className="flex flex-col">
     <NavBar />
     <main className="flex-1">{children}</main>
     <Footer />
