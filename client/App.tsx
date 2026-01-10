@@ -168,6 +168,38 @@ const App = () => (
                 </Layout>
               }
             />
+            <Route
+              path="/admin"
+              element={
+                <Layout>
+                  <AdminPanel />
+                </Layout>
+              }
+            />
+            <Route
+              path="/support"
+              element={
+                <Layout>
+                  <Support />
+                </Layout>
+              }
+            />
+            <Route
+              path="/support/new"
+              element={
+                <Layout>
+                  <SupportNewTicket />
+                </Layout>
+              }
+            />
+            <Route
+              path="/support/ticket/:ticketId"
+              element={
+                <Layout>
+                  <SupportTicketDetail />
+                </Layout>
+              }
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route
               path="*"
