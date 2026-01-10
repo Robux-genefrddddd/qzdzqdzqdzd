@@ -227,47 +227,47 @@ export function NavBar() {
         <>
           {/* Overlay */}
           <div
-            className="fixed inset-0 top-14 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 top-14 bg-black/50 z-40"
             onClick={() => setMenuOpen(false)}
           />
           {/* Menu Panel */}
-          <div className="fixed left-0 top-14 bottom-0 w-64 bg-background border-r border-border/20 overflow-y-auto z-50 shadow-xl">
-            <div className="flex flex-col h-full">
+          <div className="fixed left-0 top-14 bottom-0 w-64 bg-card border-r border-border overflow-y-auto z-50 shadow-2xl">
+            <div className="flex flex-col h-full bg-card text-foreground">
               {/* Menu Header */}
-              <div className="px-4 py-3 border-b border-border/20 flex-shrink-0">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Navigation
+              <div className="px-4 py-4 border-b border-border/40 flex-shrink-0">
+                <p className="text-xs font-bold text-primary uppercase tracking-widest">
+                  Menu
                 </p>
               </div>
 
               {/* Menu Items */}
-              <div className="flex-1 overflow-y-auto py-3 space-y-1">
+              <div className="flex-1 overflow-y-auto py-4 space-y-2 px-2">
                 <Link
                   to="/marketplace"
-                  className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Marketplace
+                  📦 Marketplace
                 </Link>
                 <Link
                   to="/support"
-                  className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Support
+                  🆘 Support
                 </Link>
                 <Link
                   to="/about"
-                  className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                  className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                   onClick={() => setMenuOpen(false)}
                 >
-                  About
+                  ℹ️ About
                 </Link>
 
                 {isAuthenticated && userProfile && (
                   <>
-                    <div className="px-4 py-3 border-t border-border/20 mt-2">
-                      <div className="flex items-center gap-2">
+                    <div className="px-3 py-4 border-t border-border/40 mt-4">
+                      <div className="flex items-center gap-3">
                         <img
                           src={
                             userProfile.profileImage ||
@@ -275,10 +275,10 @@ export function NavBar() {
                               userProfile.username
                           }
                           alt={userProfile.username}
-                          className="w-8 h-8 rounded-full object-cover"
+                          className="w-10 h-10 rounded-full object-cover"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs font-semibold text-foreground truncate">
+                          <p className="text-sm font-bold text-foreground truncate">
                             {userProfile.username}
                           </p>
                           <p className="text-xs text-muted-foreground truncate">
@@ -290,33 +290,33 @@ export function NavBar() {
 
                     <Link
                       to="/dashboard"
-                      className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                       onClick={() => setMenuOpen(false)}
                     >
-                      Dashboard
+                      📊 Dashboard
                     </Link>
                     <Link
                       to="/upload"
-                      className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                       onClick={() => setMenuOpen(false)}
                     >
-                      Upload Asset
+                      ⬆️ Upload Asset
                     </Link>
                     <Link
                       to="/groups"
-                      className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                       onClick={() => setMenuOpen(false)}
                     >
-                      Groups
+                      👥 Groups
                     </Link>
                     <Link
                       to="/messages"
-                      className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground flex items-center justify-between"
+                      className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground flex items-center justify-between"
                       onClick={() => setMenuOpen(false)}
                     >
-                      Messages
+                      💬 Messages
                       {unreadCount > 0 && (
-                        <span className="bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                        <span className="bg-destructive text-destructive-foreground text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
                           {unreadCount > 9 ? "9+" : unreadCount}
                         </span>
                       )}
@@ -325,13 +325,13 @@ export function NavBar() {
                     {(userProfile.role === "founder" ||
                       userProfile.role === "admin") && (
                       <>
-                        <div className="border-t border-border/20 mt-2 pt-2">
+                        <div className="border-t border-border/40 mt-4 pt-2">
                           <Link
                             to="/admin"
-                            className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-amber-400"
+                            className="block px-3 py-3 rounded-lg hover:bg-amber-500/10 transition-colors font-medium text-sm text-amber-400"
                             onClick={() => setMenuOpen(false)}
                           >
-                            Admin Panel
+                            ⚙️ Admin Panel
                           </Link>
                         </div>
                       </>
@@ -341,20 +341,20 @@ export function NavBar() {
 
                 {!isAuthenticated && (
                   <>
-                    <div className="border-t border-border/20 mt-2 pt-2">
+                    <div className="border-t border-border/40 mt-4 pt-2 space-y-2">
                       <Link
                         to="/login"
-                        className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-foreground"
+                        className="block px-3 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium text-sm text-foreground"
                         onClick={() => setMenuOpen(false)}
                       >
-                        Sign In
+                        🔑 Sign In
                       </Link>
                       <Link
                         to="/register"
-                        className="block px-4 py-2.5 hover:bg-secondary/50 transition-colors font-medium text-sm text-primary"
+                        className="block px-3 py-3 rounded-lg bg-primary/20 hover:bg-primary/30 transition-colors font-medium text-sm text-primary"
                         onClick={() => setMenuOpen(false)}
                       >
-                        Sign Up
+                        ➕ Sign Up
                       </Link>
                     </div>
                   </>
@@ -363,26 +363,26 @@ export function NavBar() {
 
               {/* Menu Footer */}
               {isAuthenticated && userProfile && (
-                <div className="border-t border-border/20 px-4 py-3 flex-shrink-0">
+                <div className="border-t border-border/40 px-4 py-3 flex-shrink-0">
                   <button
                     onClick={() => {
                       handleLogout();
                       setMenuOpen(false);
                     }}
-                    className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 transition-colors font-medium text-sm rounded"
+                    className="w-full text-left px-3 py-3 text-red-400 hover:bg-red-500/20 transition-colors font-medium text-sm rounded-lg"
                   >
-                    Sign Out
+                    🚪 Sign Out
                   </button>
                 </div>
               )}
 
-              {/* Roblox Logo */}
-              <div className="border-t border-border/20 px-4 py-3 flex-shrink-0 flex justify-center">
+              {/* Footer Logo */}
+              <div className="border-t border-border/40 px-4 py-4 flex-shrink-0 flex justify-center">
                 <a
                   href="https://roblox.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="opacity-60 hover:opacity-100 transition-opacity"
+                  className="opacity-70 hover:opacity-100 transition-opacity"
                 >
                   <img
                     src="https://i.ibb.co/B531Dsh6/roblox-logo-roblox-symbol-meaning-history-and-evolution-3-removebg-preview.png"
