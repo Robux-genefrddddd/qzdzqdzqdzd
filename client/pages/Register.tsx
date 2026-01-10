@@ -96,7 +96,36 @@ export default function Register() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Role Selection */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-foreground">
+                Choose your role
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {ROLES.map((role) => (
+                  <button
+                    key={role.id}
+                    type="button"
+                    onClick={() => setSelectedRole(role.id)}
+                    className={`p-3 rounded-lg border-2 transition-all text-center ${
+                      selectedRole === role.id
+                        ? "border-primary bg-primary/10"
+                        : "border-border/30 bg-background hover:border-border/60"
+                    }`}
+                  >
+                    <div className="text-2xl mb-1">{role.icon}</div>
+                    <p className="text-xs font-semibold text-foreground">
+                      {role.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {role.description}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Username */}
             <div className="space-y-2">
               <label
