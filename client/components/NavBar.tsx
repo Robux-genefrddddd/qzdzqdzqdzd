@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { logoutUser } from "@/lib/auth";
+import { logoutUser, DEFAULT_PROFILE_IMAGE } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
