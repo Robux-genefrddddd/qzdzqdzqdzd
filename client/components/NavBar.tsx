@@ -248,96 +248,149 @@ export function NavBar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border/20 py-3 space-y-1 bg-secondary/20">
-            <Link
-              to="/marketplace"
-              className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-            >
-              Marketplace
-            </Link>
-            <Link
-              to="/support"
-              className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-            >
-              Support
-            </Link>
-            <Link
-              to="/about"
-              className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-            >
-              About
-            </Link>
+          <div className="md:hidden border-t border-border/20 bg-secondary/20 flex flex-col h-[calc(100vh-4rem)]">
+            {/* Top - Logo Section */}
+            <div className="px-4 py-3 border-b border-border/20">
+              <Link to="/" className="flex items-center gap-2">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Roblox_Logo.svg/2048px-Roblox_Logo.svg.png"
+                  alt="Roblox"
+                  className="h-5 object-contain"
+                />
+                <span className="font-bold text-sm tracking-tight text-foreground">
+                  RbxAssets
+                </span>
+              </Link>
+            </div>
 
-            {isAuthenticated && userProfile ? (
-              <>
-                <div className="px-4 py-3 border-t border-border/20 mt-2">
-                  <div className="flex items-center gap-2 mb-3">
-                    <img
-                      src={
-                        userProfile.profileImage ||
-                        "https://api.dicebear.com/7.x/avataaars/svg?seed=" +
-                          userProfile.username
-                      }
-                      alt={userProfile.username}
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <p className="text-sm font-semibold text-foreground">
-                          {userProfile.username}
+            {/* Scrollable Menu Items */}
+            <div className="flex-1 overflow-y-auto space-y-1 py-3">
+              {/* Main Links */}
+              <Link
+                to="/marketplace"
+                className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+              >
+                Marketplace
+              </Link>
+              <Link
+                to="/support"
+                className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+              >
+                Support
+              </Link>
+              <Link
+                to="/about"
+                className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+              >
+                About
+              </Link>
+
+              {isAuthenticated && userProfile ? (
+                <>
+                  <div className="px-4 py-2 border-t border-border/20 mt-2">
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={
+                          userProfile.profileImage ||
+                          "https://api.dicebear.com/7.x/avataaars/svg?seed=" +
+                            userProfile.username
+                        }
+                        alt={userProfile.username}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-xs font-semibold text-foreground truncate">
+                            {userProfile.username}
+                          </p>
+                          <RoleBadge role={userProfile.role} />
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {userProfile.email}
                         </p>
-                        <RoleBadge role={userProfile.role} />
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        {userProfile.email}
-                      </p>
                     </div>
                   </div>
-                </div>
-                <Link
-                  to="/dashboard"
-                  className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/upload"
-                  className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-                >
-                  Upload Asset
-                </Link>
-                {(userProfile.role === "founder" ||
-                  userProfile.role === "admin") && (
                   <Link
-                    to="/admin"
-                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-amber-400"
+                    to="/dashboard"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
                   >
-                    Admin Panel
+                    Dashboard
                   </Link>
-                )}
+                  <Link
+                    to="/upload"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+                  >
+                    Upload Asset
+                  </Link>
+                  <Link
+                    to="/groups"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+                  >
+                    Groups
+                  </Link>
+                  <Link
+                    to="/messages"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground flex items-center justify-between"
+                  >
+                    Messages
+                    {unreadCount > 0 && (
+                      <span className="bg-destructive text-destructive-foreground text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
+                  </Link>
+                  {(userProfile.role === "founder" ||
+                    userProfile.role === "admin") && (
+                    <Link
+                      to="/admin"
+                      className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-amber-400 border-t border-border/20 mt-2"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm text-foreground"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="block px-4 py-2 bg-primary text-primary-foreground font-medium text-sm rounded-lg hover:opacity-90 transition-all mx-4 text-center"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Bottom - Roblox Logo & Logout */}
+            <div className="border-t border-border/20 px-4 py-3 space-y-2">
+              {isAuthenticated && userProfile && (
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-red-400 hover:bg-red-500/20 transition-colors font-medium text-sm mt-2 border-t border-border/20"
+                  className="w-full text-left px-3 py-2 text-red-400 hover:bg-red-500/10 transition-colors font-medium text-sm rounded"
                 >
                   Sign Out
                 </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="block px-4 py-2 hover:bg-secondary/40 transition-colors font-medium text-sm"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/register"
-                  className="block px-4 py-2 bg-primary text-primary-foreground font-medium text-sm rounded-xl hover:opacity-90 transition-all"
-                >
-                  Sign Up
-                </Link>
-              </>
-            )}
+              )}
+              <a
+                href="https://roblox.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity py-2"
+              >
+                <img
+                  src="https://i.ibb.co/B531Dsh6/roblox-logo-roblox-symbol-meaning-history-and-evolution-3-removebg-preview.png"
+                  alt="Roblox"
+                  className="h-6 object-contain"
+                />
+              </a>
+            </div>
           </div>
         )}
       </div>
