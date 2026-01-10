@@ -112,6 +112,13 @@ export default function Upload() {
     setIsSubmitting(true);
 
     try {
+      // Check authentication
+      if (!user || !userProfile) {
+        toast.error("You must be logged in to upload assets");
+        navigate("/login");
+        return;
+      }
+
       // Validate form
       if (
         !formData.name ||
@@ -119,34 +126,67 @@ export default function Upload() {
         !formData.category ||
         files.length === 0
       ) {
-        alert(
+        toast.error(
           "Please fill in all required fields and upload at least one file",
         );
         setIsSubmitting(false);
         return;
       }
 
-      // Here you would typically send the data to your backend
-      console.log("Form submitted:", {
-        ...formData,
-        files,
+      // Create asset with verification status
+      const assetId = await createAsset(user.uid, userProfile.displayName, {
+        name: formData.name,
+        description: formData.description,
+        category:
+          (formData.category as
+            | "3D Models"
+            | "UI Design"
+            | "Scripts"
+            | "Animations"
+            | "Plugins"
+            | "Sounds"
+            | "Images"
+            | "Other") || "Other",
+        price: parseFloat(formData.price) || 0,
+        imageUrl:
+          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=500&fit=crop",
+        authorId: user.uid,
+        authorName: userProfile.displayName,
+        downloads: 0,
+        rating: 0,
+        reviews: 0,
+        status: "uploading" as const,
+        tags: formData.tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag),
       });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Simulate verification delay (in real app, this would be backend check)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      alert("Asset uploaded successfully!");
-      setFormData({
-        name: "",
-        description: "",
-        category: "",
-        price: "",
-        tags: "",
-      });
-      setFiles([]);
+      toast.success(
+        "Asset uploaded! ✓ Now in verification process. You'll see it in your dashboard once approved.",
+      );
+
+      setUploadSuccess(true);
+
+      // Reset form
+      setTimeout(() => {
+        setFormData({
+          name: "",
+          description: "",
+          category: "",
+          price: "",
+          tags: "",
+        });
+        setFiles([]);
+        setUploadSuccess(false);
+        navigate("/dashboard");
+      }, 1500);
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Failed to upload asset. Please try again.");
+      toast.error("Failed to upload asset. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
