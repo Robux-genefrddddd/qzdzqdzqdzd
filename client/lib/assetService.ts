@@ -50,25 +50,26 @@ export async function getPublishedAssets(
   limitCount: number = 50,
 ) {
   try {
-    const constraints = [
-      where("status", "==", "published"),
-      orderBy("updatedAt", "desc"),
-      limit(limitCount),
-    ];
+    const constraints = [where("status", "==", "published")];
 
     if (categoryFilter) {
-      constraints.splice(1, 0, where("category", "==", categoryFilter));
+      constraints.push(where("category", "==", categoryFilter));
     }
 
     const q = query(collection(db, ASSETS_COLLECTION), ...constraints);
     const querySnapshot = await getDocs(q);
 
-    return querySnapshot.docs.map((doc) => ({
+    const assets = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
       createdAt: doc.data().createdAt?.toDate?.() || new Date(),
       updatedAt: doc.data().updatedAt?.toDate?.() || new Date(),
     })) as Asset[];
+
+    // Sort by updatedAt descending and limit results on the client side
+    return assets
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+      .slice(0, limitCount);
   } catch (error) {
     console.error("Error fetching published assets:", error);
     return [];
