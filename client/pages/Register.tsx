@@ -1,7 +1,28 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, User, ArrowRight, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, AlertCircle, Shield, MessageCircle } from "lucide-react";
 import { registerUser } from "@/lib/auth";
+
+const ROLES = [
+  {
+    id: "member",
+    name: "Creator",
+    description: "Create and sell assets",
+    icon: "🎨",
+  },
+  {
+    id: "partner",
+    name: "Partner",
+    description: "Collaborate with team",
+    icon: "🤝",
+  },
+  {
+    id: "support",
+    name: "Support Staff",
+    description: "Help our community",
+    icon: "💬",
+  },
+];
 
 export default function Register() {
   const navigate = useNavigate();
@@ -10,6 +31,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedRole, setSelectedRole] = useState<string>("member");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +51,13 @@ export default function Register() {
 
     setIsLoading(true);
     try {
-      await registerUser(email, password, username, displayName || username);
+      await registerUser(
+        email,
+        password,
+        username,
+        displayName || username,
+        selectedRole as "member" | "partner" | "admin" | "founder" | "support",
+      );
       navigate("/dashboard");
     } catch (err: any) {
       setError(err.message || "Failed to create account. Please try again.");
