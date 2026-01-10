@@ -143,8 +143,10 @@
     @apply text-sm text-foreground/85 leading-relaxed;
   }
 
-  small, .text-xs {
-    @apply text-xs font-normal text-muted-foreground;
+  small {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    @apply font-normal text-muted-foreground;
   }
 
   pre,
