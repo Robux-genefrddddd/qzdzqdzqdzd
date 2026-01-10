@@ -188,14 +188,14 @@ export function Footer() {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg hover:bg-secondary/40 transition-colors text-muted-foreground hover:text-foreground"
+              className="p-2 rounded-lg hover:bg-white/8 transition-all duration-200 text-muted-foreground/70 hover:text-foreground"
               aria-label="LinkedIn"
             >
               <Linkedin size={16} />
             </a>
             <a
               href="mailto:contact@assethub.com"
-              className="p-2 rounded-lg hover:bg-secondary/40 transition-colors text-muted-foreground hover:text-foreground"
+              className="p-2 rounded-lg hover:bg-white/8 transition-all duration-200 text-muted-foreground/70 hover:text-foreground"
               aria-label="Email"
             >
               <Mail size={16} />
