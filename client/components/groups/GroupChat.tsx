@@ -3,12 +3,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useGroupMessages, useSendMessage } from "@/hooks/useGroups";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader, Send, Image as ImageIcon, X, Trash2 } from "lucide-react";
+import { Loader, Send, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { Message } from "@shared/api";
 import { uploadImageToStorage } from "@/lib/fileService";
 import { storage } from "@/lib/firebase";
-import { ref, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 interface GroupChatProps {
   groupId: string;
