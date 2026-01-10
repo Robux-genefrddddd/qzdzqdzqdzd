@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Menu, X, LogOut, Users, Mail, Shield, Search, Info as InfoIcon, FileUp, BarChart3, MessageSquare, Lock } from "lucide-react";
+import { Menu, X, LogOut, Users, Mail, Shield, Search, Info as InfoIcon, FileUp, BarChart3, MessageSquare, Lock, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { logoutUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
