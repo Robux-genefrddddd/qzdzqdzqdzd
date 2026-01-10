@@ -7,16 +7,31 @@ import {
   Shield,
   Clock,
   AlertCircle,
+  AlertTriangle,
+  X,
+  Mail,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { logoutUser } from "@/lib/auth";
 import { logAction, getAuditLogs } from "@/lib/auditService";
+import {
+  getMaintenanceStatus,
+  setMaintenanceMode,
+  subscribeToMaintenanceStatus,
+  MaintenanceStatus,
+} from "@/lib/maintenanceService";
 import { toast } from "sonner";
 import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { UserDetailModal } from "@/components/UserDetailModal";
+import { BroadcastMessageModal } from "@/components/BroadcastMessageModal";
+import {
+  getAllBroadcastMessages,
+  deleteBroadcastMessage,
+} from "@/lib/broadcastService";
 
 interface User {
   uid: string;
@@ -43,14 +58,23 @@ interface AuditLog {
 export default function AdminPanel() {
   const navigate = useNavigate();
   const { user, userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState<"users" | "logs">("users");
+  const [activeTab, setActiveTab] = useState<
+    "users" | "logs" | "maintenance" | "messages"
+  >("users");
   const [users, setUsers] = useState<User[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [maintenanceStatus, setMaintenanceStatus] =
+    useState<MaintenanceStatus | null>(null);
+  const [maintenanceMessage, setMaintenanceMessage] = useState("");
+  const [updatingMaintenance, setUpdatingMaintenance] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+  const [broadcastMessages, setBroadcastMessages] = useState<any[]>([]);
 
-  // Check authorization
+  // Check authorization and load maintenance status
   useEffect(() => {
     if (!user || !userProfile) {
       navigate("/login");
@@ -63,6 +87,14 @@ export default function AdminPanel() {
     }
 
     loadData();
+
+    // Subscribe to maintenance status (real-time updates)
+    const unsubscribe = subscribeToMaintenanceStatus((status) => {
+      setMaintenanceStatus(status);
+      setMaintenanceMessage(status.message || "");
+    });
+
+    return unsubscribe;
   }, [user, userProfile, navigate]);
 
   const loadData = async () => {
@@ -90,6 +122,12 @@ export default function AdminPanel() {
       // Fetch audit logs
       const logs = await getAuditLogs();
       setAuditLogs(logs as AuditLog[]);
+
+      // Fetch broadcast messages (founder only)
+      if (userProfile?.role === "founder") {
+        const messages = await getAllBroadcastMessages();
+        setBroadcastMessages(messages);
+      }
     } catch (error) {
       console.error("Error loading data:", error);
       toast.error("Failed to load admin data");
@@ -110,6 +148,41 @@ export default function AdminPanel() {
   const handleUserAction = async () => {
     // Reload data after user action
     await loadData();
+  };
+
+  const handleMaintenanceModeChange = async () => {
+    if (userProfile?.role !== "founder") {
+      toast.error("Only founders can change maintenance mode");
+      return;
+    }
+
+    setUpdatingMaintenance(true);
+    try {
+      const newStatus = !maintenanceStatus?.enabled;
+      await setMaintenanceMode(
+        newStatus,
+        maintenanceMessage,
+        userProfile.displayName,
+      );
+      toast.success(`Maintenance mode ${newStatus ? "enabled" : "disabled"}`);
+      setShowMaintenanceModal(false);
+    } catch (error) {
+      console.error("Error updating maintenance mode:", error);
+      toast.error("Failed to update maintenance mode");
+    } finally {
+      setUpdatingMaintenance(false);
+    }
+  };
+
+  const handleDeleteBroadcastMessage = async (messageId: string) => {
+    try {
+      await deleteBroadcastMessage(messageId);
+      setBroadcastMessages((prev) => prev.filter((m) => m.id !== messageId));
+      toast.success("Message deleted");
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      toast.error("Failed to delete message");
+    }
   };
 
   // Filter users based on search
@@ -141,25 +214,70 @@ export default function AdminPanel() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold flex items-center gap-3">
-              <div className="p-2 bg-primary/20 rounded-lg">
-                <Shield size={32} className="text-primary" />
-              </div>
-              Admin Panel
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Manage users, issue warnings, and monitor activities
-            </p>
+        <div className="space-y-6 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold">Admin Panel</h1>
+              <p className="text-muted-foreground mt-2">
+                Manage users, issue warnings, and monitor activities
+              </p>
+            </div>
+            <Button
+              onClick={handleLogout}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              <LogOut size={16} className="mr-2" />
+              Sign Out
+            </Button>
           </div>
-          <Button
-            onClick={handleLogout}
-            className="bg-destructive hover:bg-destructive/90"
-          >
-            <LogOut size={16} className="mr-2" />
-            Sign Out
-          </Button>
+
+          {/* Maintenance Mode Alert */}
+          {maintenanceStatus?.enabled && (
+            <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl flex items-start justify-between">
+              <div className="flex items-start gap-3">
+                <AlertTriangle size={20} className="text-yellow-600 mt-0.5" />
+                <div>
+                  <h3 className="font-semibold text-yellow-600">
+                    Maintenance Mode Active
+                  </h3>
+                  {maintenanceStatus.message && (
+                    <p className="text-sm text-yellow-600/80 mt-1">
+                      {maintenanceStatus.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {userProfile?.role === "founder" && (
+                <Button
+                  onClick={() => setShowMaintenanceModal(true)}
+                  variant="outline"
+                  size="sm"
+                  className="ml-4"
+                >
+                  Manage
+                </Button>
+              )}
+            </div>
+          )}
+
+          {/* Founder-Only Maintenance Button */}
+          {userProfile?.role === "founder" && !maintenanceStatus?.enabled && (
+            <div className="flex items-center justify-between p-4 bg-card border border-border/30 rounded-xl">
+              <div>
+                <h3 className="font-semibold">Maintenance Mode</h3>
+                <p className="text-sm text-muted-foreground">
+                  Put the site in maintenance mode
+                </p>
+              </div>
+              <Button
+                onClick={() => setShowMaintenanceModal(true)}
+                variant="outline"
+                size="sm"
+              >
+                Enable
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Stats */}
@@ -181,10 +299,10 @@ export default function AdminPanel() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 border-b border-border/20">
+        <div className="flex gap-1 mb-6 border-b border-border/20 overflow-x-auto">
           <button
             onClick={() => setActiveTab("users")}
-            className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors ${
+            className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === "users"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
@@ -195,7 +313,7 @@ export default function AdminPanel() {
           </button>
           <button
             onClick={() => setActiveTab("logs")}
-            className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors ${
+            className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === "logs"
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
@@ -204,6 +322,32 @@ export default function AdminPanel() {
             <Clock size={18} />
             Audit Logs ({auditLogs.length})
           </button>
+          {userProfile?.role === "founder" && (
+            <>
+              <button
+                onClick={() => setActiveTab("messages")}
+                className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === "messages"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Mail size={18} />
+                Messages ({broadcastMessages.length})
+              </button>
+              <button
+                onClick={() => setActiveTab("maintenance")}
+                className={`flex items-center gap-2 px-4 py-3 font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === "maintenance"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <AlertTriangle size={18} />
+                Settings
+              </button>
+            </>
+          )}
         </div>
 
         {loading ? (
@@ -276,7 +420,7 @@ export default function AdminPanel() {
                           )}
                           {u.isBanned && (
                             <span className="px-2 py-1 bg-destructive/20 text-destructive text-xs rounded font-medium">
-                              🚫 BANNED
+                              BANNED
                             </span>
                           )}
                         </div>
@@ -298,6 +442,121 @@ export default function AdminPanel() {
                   </div>
                 ))
               )}
+            </div>
+          </div>
+        ) : activeTab === "messages" && userProfile?.role === "founder" ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Broadcast Messages</h3>
+              <Button
+                onClick={() => setShowBroadcastModal(true)}
+                className="gap-2"
+              >
+                <Mail size={16} />
+                Send Message
+              </Button>
+            </div>
+
+            {broadcastMessages.length === 0 ? (
+              <div className="text-center py-12">
+                <Mail
+                  size={40}
+                  className="mx-auto text-muted-foreground mb-4"
+                />
+                <p className="text-muted-foreground">No messages sent yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {broadcastMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className="p-4 bg-card border border-border/30 rounded-xl hover:border-border/60 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="font-semibold text-foreground">
+                          {msg.title}
+                        </p>
+                        <p className="text-sm text-foreground/80 mt-2 leading-relaxed">
+                          {msg.message}
+                        </p>
+                        <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+                          <span>
+                            {msg.recipientType === "all"
+                              ? `Sent to all ${users.length} users`
+                              : `Sent to ${msg.recipientIds?.length || 0} users`}
+                          </span>
+                          <span>
+                            {new Date(msg.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleDeleteBroadcastMessage(msg.id)}
+                        className="p-1 hover:bg-destructive/20 rounded transition-colors"
+                      >
+                        <X size={16} className="text-destructive" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : activeTab === "maintenance" && userProfile?.role === "founder" ? (
+          <div className="space-y-6">
+            <div className="p-6 bg-card border border-border/30 rounded-xl">
+              <h3 className="text-lg font-semibold mb-4">
+                Maintenance Mode Settings
+              </h3>
+
+              <div className="space-y-4">
+                <div className="p-4 bg-secondary/20 border border-border/30 rounded-lg">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="font-semibold">Status</p>
+                      <p className="text-sm text-muted-foreground">
+                        {maintenanceStatus?.enabled
+                          ? "Site is in maintenance mode"
+                          : "Site is operating normally"}
+                      </p>
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold ${
+                        maintenanceStatus?.enabled
+                          ? "bg-yellow-500/20 text-yellow-600"
+                          : "bg-green-500/20 text-green-600"
+                      }`}
+                    >
+                      {maintenanceStatus?.enabled ? "ACTIVE" : "INACTIVE"}
+                    </span>
+                  </div>
+
+                  {maintenanceStatus?.updatedAt && (
+                    <p className="text-xs text-muted-foreground">
+                      Last updated:{" "}
+                      {maintenanceStatus.updatedAt.toLocaleDateString()} at{" "}
+                      {maintenanceStatus.updatedAt.toLocaleTimeString()}
+                    </p>
+                  )}
+                </div>
+
+                <Button
+                  onClick={() => setShowMaintenanceModal(true)}
+                  className="w-full"
+                >
+                  {maintenanceStatus?.enabled ? "Disable" : "Enable"}{" "}
+                  Maintenance Mode
+                </Button>
+              </div>
+            </div>
+
+            <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+              <p className="text-sm text-blue-600/90">
+                When maintenance mode is enabled, visitors will see a
+                maintenance notice. Use this when performing critical updates or
+                maintenance.
+              </p>
             </div>
           </div>
         ) : (
@@ -354,6 +613,89 @@ export default function AdminPanel() {
           </div>
         )}
       </div>
+
+      {/* Maintenance Mode Modal */}
+      {showMaintenanceModal && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-card border border-border/40 rounded-2xl w-full max-w-md shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-border/20">
+              <h2 className="text-xl font-bold">
+                {maintenanceStatus?.enabled
+                  ? "Disable Maintenance Mode"
+                  : "Enable Maintenance Mode"}
+              </h2>
+              <button
+                onClick={() => setShowMaintenanceModal(false)}
+                className="p-1 hover:bg-secondary/50 rounded-lg transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-4">
+              {!maintenanceStatus?.enabled && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Maintenance Message (Optional)
+                    </label>
+                    <Textarea
+                      value={maintenanceMessage}
+                      onChange={(e) => setMaintenanceMessage(e.target.value)}
+                      placeholder="We're currently performing maintenance. We'll be back soon!"
+                      rows={4}
+                      className="w-full"
+                    />
+                    <p className="text-xs text-muted-foreground mt-2">
+                      This message will be shown to visitors while maintenance
+                      mode is active.
+                    </p>
+                  </div>
+
+                  <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                    <p className="text-sm text-blue-600/90">
+                      When enabled, the site will display a maintenance page to
+                      all visitors.
+                    </p>
+                  </div>
+                </>
+              )}
+
+              {maintenanceStatus?.enabled && (
+                <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                  <p className="text-sm text-yellow-600/90">
+                    Are you sure you want to disable maintenance mode? The site
+                    will immediately become accessible to all users.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-border/20 p-6 bg-card space-y-3">
+              <Button
+                onClick={handleMaintenanceModeChange}
+                disabled={updatingMaintenance}
+                className="w-full"
+                variant={maintenanceStatus?.enabled ? "destructive" : "default"}
+              >
+                {maintenanceStatus?.enabled
+                  ? "Disable Maintenance"
+                  : "Enable Maintenance"}
+              </Button>
+              <Button
+                onClick={() => setShowMaintenanceModal(false)}
+                variant="outline"
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* User Detail Modal */}
       <UserDetailModal

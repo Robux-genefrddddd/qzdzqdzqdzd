@@ -33,8 +33,47 @@ import NotFound from "./pages/NotFound";
 import Groups from "./pages/Groups";
 import GroupDetail from "./pages/GroupDetail";
 import Messages from "./pages/Messages";
+import BanNotice from "./pages/BanNotice";
+import { useEffect, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { getUserActiveWarnings } from "@/lib/warningService";
 
 const queryClient = new QueryClient();
+
+// Guard component to check if user is banned
+const BanGuard = ({ children }: { children: ReactNode }) => {
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    const checkBanStatus = async () => {
+      if (!loading && user) {
+        const warnings = await getUserActiveWarnings(user.uid);
+        const hasBan = warnings.some(
+          (w) => w.type === "ban" || w.type === "suspension",
+        );
+        if (hasBan) {
+          navigate("/banned");
+        }
+      }
+    };
+
+    checkBanStatus();
+  }, [user, loading, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+};
 
 const Layout = ({ children }: { children: React.ReactNode }) => (
   <div className="min-h-screen flex flex-col">
@@ -53,28 +92,38 @@ const App = () => (
         <WarningNotificationModal />
         <BrowserRouter>
           <Routes>
+            {/* Ban Notice - no layout, fullscreen */}
+            <Route path="/banned" element={<BanNotice />} />
+
+            {/* Protected routes with ban guard */}
             <Route
               path="/"
               element={
-                <Layout>
-                  <Index />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Index />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/marketplace"
               element={
-                <Layout>
-                  <Marketplace />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Marketplace />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/asset/:id"
               element={
-                <Layout>
-                  <AssetDetail />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <AssetDetail />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
@@ -96,137 +145,171 @@ const App = () => (
             <Route
               path="/dashboard"
               element={
-                <Layout>
-                  <Dashboard />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Dashboard />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/about"
               element={
-                <Layout>
-                  <About />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <About />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/upload"
               element={
-                <Layout>
-                  <Upload />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Upload />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/collections"
               element={
-                <Layout>
-                  <Collections />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Collections />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/blog"
               element={
-                <Layout>
-                  <Blog />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Blog />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/contact"
               element={
-                <Layout>
-                  <Contact />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Contact />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/privacy"
               element={
-                <Layout>
-                  <Privacy />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Privacy />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/terms"
               element={
-                <Layout>
-                  <Terms />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Terms />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/cookies"
               element={
-                <Layout>
-                  <Cookies />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Cookies />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/legal"
               element={
-                <Layout>
-                  <Legal />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Legal />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/admin"
               element={
-                <Layout>
-                  <AdminPanel />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <AdminPanel />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/support"
               element={
-                <Layout>
-                  <Support />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Support />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/support/new"
               element={
-                <Layout>
-                  <SupportNewTicket />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <SupportNewTicket />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/support/ticket/:ticketId"
               element={
-                <Layout>
-                  <SupportTicketDetail />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <SupportTicketDetail />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/groups"
               element={
-                <Layout>
-                  <Groups />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Groups />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/groups/:id"
               element={
-                <Layout>
-                  <GroupDetail />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <GroupDetail />
+                  </Layout>
+                </BanGuard>
               }
             />
             <Route
               path="/messages"
               element={
-                <Layout>
-                  <Messages />
-                </Layout>
+                <BanGuard>
+                  <Layout>
+                    <Messages />
+                  </Layout>
+                </BanGuard>
               }
             />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
