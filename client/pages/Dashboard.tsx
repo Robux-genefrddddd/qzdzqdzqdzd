@@ -51,6 +51,10 @@ export default function Dashboard() {
   const { userProfile, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [updateFileAsset, setUpdateFileAsset] = useState<Asset | null>(null);
+  const [updateFileDialogOpen, setUpdateFileDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
