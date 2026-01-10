@@ -16,18 +16,18 @@ export function NavBar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/98 backdrop-blur-md border-b border-border/30">
+    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                <span className="font-bold text-primary-foreground text-sm">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-accent rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                <span className="font-bold text-primary-foreground text-xs">
                   a
                 </span>
               </div>
-              <span className="font-bold text-base hidden sm:inline tracking-tight">
+              <span className="font-bold text-sm hidden sm:inline tracking-tight text-foreground">
                 AssetHub
               </span>
             </div>
