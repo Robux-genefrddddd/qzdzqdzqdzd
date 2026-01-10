@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Asset } from "@/lib/types";
 import { Star, Download, Lock } from "lucide-react";
+import type { Asset } from "@/lib/assetService";
 
 interface AssetCardProps {
   asset: Asset;
@@ -8,6 +8,14 @@ interface AssetCardProps {
 
 export function AssetCard({ asset }: AssetCardProps) {
   const isFree = asset.price === null || asset.price === 0;
+
+  const handleDownload = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Navigate to asset detail page where preview modal will open
+    window.location.href = `/asset/${asset.id}?preview=true`;
+  };
 
   return (
     <Link to={`/asset/${asset.id}`}>
@@ -80,9 +88,7 @@ export function AssetCard({ asset }: AssetCardProps) {
 
             {/* Action Button */}
             <button
-              onClick={(e) => {
-                e.preventDefault();
-              }}
+              onClick={isFree ? handleDownload : (e) => e.preventDefault()}
               className={`w-full flex items-center justify-center gap-1.5 py-1.5 rounded-md font-medium transition-all duration-200 text-xs ${
                 isFree
                   ? "bg-secondary/30 border border-border/20 text-foreground/80 hover:bg-secondary/45 hover:border-border/30"

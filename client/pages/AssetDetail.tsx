@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  Link,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import {
   Star,
   Download,
@@ -25,18 +30,24 @@ import {
   deleteReview,
   type Review,
 } from "@/lib/reviewService";
-import { downloadAssetFile, forceDownloadFile } from "@/lib/fileService";
+import {
+  downloadAssetFile,
+  forceDownloadFile,
+  type AssetFile,
+} from "@/lib/fileService";
 import {
   isFavorited,
   addFavorite,
   removeFavorite,
 } from "@/lib/favoritesService";
+import { FilePreviewModal } from "@/components/FilePreviewModal";
 import { toast } from "sonner";
 import type { Asset } from "@/lib/assetService";
 
 export default function AssetDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, userProfile } = useAuth();
   const [asset, setAsset] = useState<Asset | null>(null);
   const [authorProfile, setAuthorProfile] = useState<any>(null);
@@ -51,6 +62,7 @@ export default function AssetDetail() {
   const [downloading, setDownloading] = useState(false);
   const [isFav, setIsFav] = useState(false);
   const [deletingAsset, setDeletingAsset] = useState(false);
+  const [showFilePreview, setShowFilePreview] = useState(false);
 
   useEffect(() => {
     const fetchAssetDetails = async () => {
@@ -94,6 +106,13 @@ export default function AssetDetail() {
 
     fetchAssetDetails();
   }, [id, user]);
+
+  // Auto-open preview modal if preview=true in query params
+  useEffect(() => {
+    if (searchParams.get("preview") === "true") {
+      setShowFilePreview(true);
+    }
+  }, [searchParams]);
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,27 +255,32 @@ export default function AssetDetail() {
     }
   };
 
-  const handleDownloadAsset = async () => {
-    if (!asset || !asset.filePaths || asset.filePaths.length === 0) {
-      toast.error("No files available for download");
+  const handleDownloadAsset = () => {
+    if (!asset) return;
+    setShowFilePreview(true);
+  };
+
+  const handleDownloadSelectedFiles = async (selectedFiles: AssetFile[]) => {
+    if (!asset || selectedFiles.length === 0) {
+      toast.error("No files selected for download");
       return;
     }
 
     setDownloading(true);
 
     try {
-      // Download each file
-      for (const filePath of asset.filePaths) {
+      // Download each selected file
+      for (const fileData of selectedFiles) {
         try {
-          const fileName = filePath.split("/").pop() || "asset";
-          const blob = await downloadAssetFile(filePath);
+          const fileName = fileData.name;
+          const blob = await downloadAssetFile(fileData.path);
           forceDownloadFile(blob, fileName);
 
           // Small delay between downloads to allow browser to process
           await new Promise((resolve) => setTimeout(resolve, 500));
         } catch (err) {
-          console.error(`Error downloading file ${filePath}:`, err);
-          toast.error(`Failed to download file: ${filePath}`);
+          console.error(`Error downloading file ${fileData.name}:`, err);
+          toast.error(`Failed to download file: ${fileData.name}`);
         }
       }
 
@@ -268,7 +292,8 @@ export default function AssetDetail() {
         );
       }
 
-      toast.success(`${asset.filePaths.length} file(s) download started`);
+      toast.success(`${selectedFiles.length} file(s) download started`);
+      setShowFilePreview(false);
     } catch (error) {
       console.error("Error downloading asset:", error);
       toast.error("Failed to download asset");
@@ -634,6 +659,16 @@ export default function AssetDetail() {
           </Link>
         </div>
       </div>
+
+      {/* File Preview Modal */}
+      <FilePreviewModal
+        assetId={id || ""}
+        assetName={asset.name}
+        isOpen={showFilePreview}
+        onClose={() => setShowFilePreview(false)}
+        onDownload={handleDownloadSelectedFiles}
+        isDownloading={downloading}
+      />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { getUserTickets } from "@/lib/ticketService";
@@ -86,19 +85,13 @@ export default function Support() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <MessageSquare className="text-primary" />
-              Support Center
-            </h1>
+            <h1 className="text-3xl font-bold">Support Center</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Get help with any issues or report problems
+              Need help? Create a ticket
             </p>
           </div>
           <Link to="/support/new">
-            <Button className="gap-2">
-              <Plus size={18} />
-              Create Ticket
-            </Button>
+            <Button>Create Ticket</Button>
           </Link>
         </div>
 
@@ -106,24 +99,16 @@ export default function Support() {
         <div className="space-y-4">
           {tickets.length === 0 ? (
             <div className="bg-secondary/30 border border-border rounded-lg p-12 text-center space-y-4">
-              <MessageSquare
-                size={48}
-                className="mx-auto text-muted-foreground"
-              />
               <div>
                 <p className="text-lg font-semibold text-foreground mb-2">
-                  No support tickets yet
+                  No tickets yet
                 </p>
                 <p className="text-sm text-muted-foreground mb-6">
-                  If you need help, create a new support ticket and our team
-                  will assist you shortly.
+                  Create a ticket to get help from our team
                 </p>
               </div>
               <Link to="/support/new">
-                <Button>
-                  <Plus size={16} className="mr-2" />
-                  Create Your First Ticket
-                </Button>
+                <Button>Create First Ticket</Button>
               </Link>
             </div>
           ) : (
