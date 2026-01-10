@@ -24,6 +24,10 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import Legal from "./pages/Legal";
+import AdminPanel from "./pages/AdminPanel";
+import Support from "./pages/Support";
+import SupportNewTicket from "./pages/SupportNewTicket";
+import SupportTicketDetail from "./pages/SupportTicketDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
