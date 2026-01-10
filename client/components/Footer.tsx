@@ -5,13 +5,13 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border/50 bg-background/40 mt-20">
+    <footer className="border-t border-border/20 bg-background/50 mt-20">
       <div className="container mx-auto px-4 py-10 md:py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 bg-accent rounded-sm flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-6 h-6 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
                 <span className="font-bold text-primary-foreground text-xs">
                   a
                 </span>
