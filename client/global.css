@@ -101,6 +101,7 @@
 
   html {
     scroll-behavior: smooth;
+    color-scheme: dark light;
   }
 
   body {
@@ -138,19 +139,23 @@
 }
 
 @layer components {
-  .glass {
-    @apply bg-white/80 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10;
+  .card-base {
+    @apply bg-card border border-border/50 rounded-sm;
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:scale-105;
+    @apply card-base transition-all duration-200 hover:border-border/80 hover:bg-card/80;
   }
 
   .btn-primary {
-    @apply px-6 py-2.5 bg-primary text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:opacity-90 active:scale-95;
+    @apply px-4 py-2 bg-primary text-primary-foreground font-medium text-sm rounded-sm transition-all duration-150 hover:opacity-90 active:scale-95;
   }
 
   .btn-secondary {
-    @apply px-6 py-2.5 bg-secondary text-secondary-foreground font-medium rounded-lg border border-border transition-all duration-200 hover:bg-muted active:scale-95;
+    @apply px-4 py-2 bg-secondary text-secondary-foreground font-medium text-sm rounded-sm border border-border transition-all duration-150 hover:bg-muted active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply px-4 py-2 text-foreground font-medium text-sm rounded-sm transition-all duration-150 hover:bg-secondary;
   }
 }
