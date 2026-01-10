@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { createAsset } from "@/lib/assetService";
+import { uploadAssetFile } from "@/lib/fileService";
 import { toast } from "sonner";
 import { UploadStep1 } from "@/components/upload/UploadStep1";
 import { UploadStep2 } from "@/components/upload/UploadStep2";
@@ -13,6 +14,7 @@ interface FilePreview {
   name: string;
   size: number;
   type: string;
+  file?: File; // Store actual file for upload
 }
 
 const STEPS = [
@@ -48,6 +50,7 @@ export default function Upload() {
       name: file.name,
       size: file.size,
       type: file.type,
+      file: file, // Store the actual file for upload
     }));
     setFiles((prev) => [...prev, ...newPreviews]);
   };
@@ -115,8 +118,8 @@ export default function Upload() {
         return;
       }
 
-      // Create asset
-      await createAsset(user.uid, userProfile.displayName, {
+      // Create asset first
+      const assetId = await createAsset(user.uid, userProfile.displayName, {
         name: formData.name,
         description: formData.description,
         category: (formData.category as any) || "Other",
@@ -130,7 +133,31 @@ export default function Upload() {
           .split(",")
           .map((tag) => tag.trim())
           .filter((tag) => tag),
+        filePaths: [],
       });
+
+      // Upload files to Firebase Storage
+      const filePaths: string[] = [];
+      for (const filePreview of files) {
+        if (filePreview.file) {
+          try {
+            const filePath = await uploadAssetFile(assetId, filePreview.file);
+            filePaths.push(filePath);
+          } catch (uploadError) {
+            console.error(
+              `Error uploading file ${filePreview.name}:`,
+              uploadError,
+            );
+            toast.error(`Failed to upload file: ${filePreview.name}`);
+          }
+        }
+      }
+
+      // Update asset with file paths
+      if (filePaths.length > 0) {
+        const { updateAsset } = await import("@/lib/assetService");
+        await updateAsset(assetId, { filePaths });
+      }
 
       toast.success("Asset uploaded successfully!");
       setUploadSuccess(true);

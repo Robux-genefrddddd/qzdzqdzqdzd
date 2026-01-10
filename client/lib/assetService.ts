@@ -43,6 +43,7 @@ export interface Asset {
     | "archived"
     | "rejected";
   tags: string[];
+  filePaths?: string[]; // Firebase Storage paths for asset files
   createdAt: Date;
   updatedAt: Date;
   featured?: boolean;

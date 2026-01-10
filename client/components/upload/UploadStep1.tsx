@@ -167,6 +167,7 @@ export function UploadStep1({
           <input
             type="file"
             multiple
+            accept=".zip,.rar,.7z,.fbx,.obj,.gltf,.glb,.unity,.unitypackage,.rbxm,.rbxl,.lua,.ts,.js,.json,.png,.jpg,.jpeg,.wav,.mp3,.ogg"
             onChange={(e) => {
               if (e.target.files) {
                 onFilesAdd(Array.from(e.target.files));
@@ -185,7 +186,8 @@ export function UploadStep1({
                 Drag and drop your files here
               </p>
               <p className="text-xs text-muted-foreground">
-                or click to select multiple files
+                or click to select (ZIP, 3D Models, Scripts, Images, Audio,
+                etc.)
               </p>
             </div>
           </div>
