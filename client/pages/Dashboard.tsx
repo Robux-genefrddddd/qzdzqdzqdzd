@@ -222,32 +222,32 @@ export default function Dashboard() {
               </div>
 
               {assets.length === 0 ? (
-                <div className="text-center py-8 space-y-3">
-                  <p className="text-sm text-muted-foreground">
+                <div className="text-center py-6 space-y-2">
+                  <p className="text-xs text-muted-foreground">
                     You haven't uploaded any assets yet.
                   </p>
                   <Link to="/upload">
-                    <Button size="sm">
-                      <UploadIcon size={14} className="mr-2" />
-                      Upload Your First Asset
+                    <Button size="sm" className="text-xs">
+                      <UploadIcon size={12} className="mr-1" />
+                      Upload Asset
                     </Button>
                   </Link>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {assets.slice(0, 5).map((asset) => (
                     <div
                       key={asset.id}
-                      className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg hover:bg-secondary/70 transition-colors"
+                      className="flex items-center justify-between p-2 bg-secondary/50 rounded-lg hover:bg-secondary/70 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <img
                           src={asset.imageUrl}
                           alt={asset.name}
-                          className="w-10 h-10 rounded object-cover"
+                          className="w-8 h-8 rounded object-cover"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">
+                          <p className="text-xs font-medium text-foreground truncate">
                             {asset.name}
                           </p>
                           <p className="text-xs text-muted-foreground">
@@ -255,10 +255,10 @@ export default function Dashboard() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <div className="text-right">
                           <p className="text-xs font-medium text-foreground">
-                            {asset.downloads} downloads
+                            {asset.downloads}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             ${(asset.price || 0).toFixed(2)}
