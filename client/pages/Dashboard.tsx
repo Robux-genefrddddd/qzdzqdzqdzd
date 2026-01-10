@@ -8,6 +8,7 @@ import {
   Star,
   MoreVertical,
   LogOut,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +20,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { getUserAssets, Asset } from "@/lib/assetService";
 import { logoutUser } from "@/lib/auth";
+import { WarningsSection } from "@/components/WarningsSection";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "assets">("overview");
