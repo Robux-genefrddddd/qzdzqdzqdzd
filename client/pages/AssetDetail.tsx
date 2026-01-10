@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Star, Download, Heart, ArrowRight, Loader, Trash2, FileDown } from "lucide-react";
 import { getAsset, incrementAssetDownloads } from "@/lib/assetService";
 import { getUserProfile } from "@/lib/auth";
