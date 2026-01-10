@@ -51,12 +51,17 @@ interface AuditLog {
 export default function AdminPanel() {
   const navigate = useNavigate();
   const { user, userProfile } = useAuth();
-  const [activeTab, setActiveTab] = useState<"users" | "logs">("users");
+  const [activeTab, setActiveTab] = useState<"users" | "logs" | "maintenance">("users");
   const [users, setUsers] = useState<User[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [maintenanceStatus, setMaintenanceStatus] =
+    useState<MaintenanceStatus | null>(null);
+  const [maintenanceMessage, setMaintenanceMessage] = useState("");
+  const [updatingMaintenance, setUpdatingMaintenance] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
 
   // Check authorization
   useEffect(() => {
