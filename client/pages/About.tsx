@@ -131,34 +131,34 @@ export default function About() {
       </section>
 
       {/* Values Section */}
-      <section className="py-12 md:py-16 border-b border-border/50">
+      <section className="py-8 md:py-10 border-b border-border/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-8">Core Values</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
-                <CheckCircle2 size={20} />
+          <h2 className="text-xl font-bold mb-6">Core Values</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
+                <CheckCircle2 size={16} />
               </div>
-              <h3 className="font-semibold text-sm">Quality</h3>
+              <h3 className="font-semibold text-xs">Quality</h3>
               <p className="text-xs text-muted-foreground">
                 Every asset is reviewed for quality, compatibility, and
                 compliance.
               </p>
             </div>
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
-                <CheckCircle2 size={20} />
+            <div className="space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
+                <CheckCircle2 size={16} />
               </div>
-              <h3 className="font-semibold text-sm">Creator-First</h3>
+              <h3 className="font-semibold text-xs">Creator-First</h3>
               <p className="text-xs text-muted-foreground">
                 Fair compensation and tools that empower creators.
               </p>
             </div>
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
-                <CheckCircle2 size={20} />
+            <div className="space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-accent/20 text-accent flex items-center justify-center">
+                <CheckCircle2 size={16} />
               </div>
-              <h3 className="font-semibold text-sm">Security</h3>
+              <h3 className="font-semibold text-xs">Security</h3>
               <p className="text-xs text-muted-foreground">
                 Enterprise-grade security for all transactions and data.
               </p>
