@@ -512,7 +512,7 @@ export function NavBar() {
                               className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-secondary/50 transition-colors duration-150 text-foreground hover:text-primary group"
                               onClick={closeMenu}
                             >
-                              <Search size={18} className="text-muted-foreground group-hover:text-primary" />
+                              <Lock size={18} className="text-muted-foreground group-hover:text-primary" />
                               <span className="text-sm font-medium">Sign In</span>
                             </Link>
                           </motion.div>
