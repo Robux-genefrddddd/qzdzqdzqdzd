@@ -278,14 +278,16 @@ export function NavBar() {
 
                   <div className="flex-1 overflow-y-auto">
                     <div className="px-4 py-6">
-                      <motion.p
+                      <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.15 }}
-                        className="text-xs font-semibold text-blue-400/70 uppercase tracking-wider mb-4 px-2"
+                        className="mb-4"
                       >
-                        Explore
-                      </motion.p>
+                        <p className="text-xs font-semibold text-blue-400/70 uppercase tracking-wider mb-3 px-2">
+                          🔍 Explore
+                        </p>
+                      </motion.div>
                       <div className="space-y-2">
                         <motion.div
                           custom={0}
@@ -298,17 +300,18 @@ export function NavBar() {
                             className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-500/15 transition-all duration-200 font-medium text-slate-100 hover:text-blue-300 group"
                             onClick={closeMenu}
                           >
-                            <span className="text-xl group-hover:scale-110 transition-transform">
-                              📦
+                            <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                              🛍️
                             </span>
-                            <div>
+                            <div className="flex-1">
                               <div className="text-sm font-semibold">
                                 Marketplace
                               </div>
                               <div className="text-xs text-slate-500">
-                                Browse assets
+                                Browse all assets
                               </div>
                             </div>
+                            <span className="text-xs text-slate-600">→</span>
                           </Link>
                         </motion.div>
                         <motion.div
@@ -322,17 +325,18 @@ export function NavBar() {
                             className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-500/15 transition-all duration-200 font-medium text-slate-100 hover:text-blue-300 group"
                             onClick={closeMenu}
                           >
-                            <span className="text-xl group-hover:scale-110 transition-transform">
-                              🆘
+                            <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                              🤝
                             </span>
-                            <div>
+                            <div className="flex-1">
                               <div className="text-sm font-semibold">
                                 Support
                               </div>
                               <div className="text-xs text-slate-500">
-                                Get help
+                                Need help?
                               </div>
                             </div>
+                            <span className="text-xs text-slate-600">→</span>
                           </Link>
                         </motion.div>
                         <motion.div
@@ -346,15 +350,16 @@ export function NavBar() {
                             className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-blue-500/15 transition-all duration-200 font-medium text-slate-100 hover:text-blue-300 group"
                             onClick={closeMenu}
                           >
-                            <span className="text-xl group-hover:scale-110 transition-transform">
-                              ℹ️
+                            <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                              📚
                             </span>
-                            <div>
+                            <div className="flex-1">
                               <div className="text-sm font-semibold">About</div>
                               <div className="text-xs text-slate-500">
                                 Learn more
                               </div>
                             </div>
+                            <span className="text-xs text-slate-600">→</span>
                           </Link>
                         </motion.div>
                       </div>
