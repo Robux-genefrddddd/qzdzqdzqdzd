@@ -86,41 +86,41 @@ export default function Marketplace() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 md:py-12">
+      <div className="container mx-auto px-6 py-10 md:py-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">Marketplace</h1>
-          <p className="text-lg text-muted-foreground">
+        <div className="mb-10">
+          <h1 className="text-3xl font-bold mb-2">Marketplace</h1>
+          <p className="text-sm text-muted-foreground">
             Discover and download high-quality digital assets for your projects
           </p>
         </div>
 
         {/* Search Bar */}
-        <div className="mb-8">
+        <div className="mb-10">
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-              size={20}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/60"
+              size={18}
             />
             <input
               type="text"
               placeholder="Search assets..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-secondary/50 border border-border rounded-lg focus:outline-none focus:border-primary transition-colors"
+              className="input-base pl-10 pr-4"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
+                className="absolute right-3 top-1/2 -translate-y-1/2 hover:text-foreground transition-colors"
               >
-                <X size={20} className="text-muted-foreground" />
+                <X size={18} className="text-muted-foreground/60" />
               </button>
             )}
           </div>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex gap-8">
           {/* Filters Sidebar */}
           <aside
             className={`${
