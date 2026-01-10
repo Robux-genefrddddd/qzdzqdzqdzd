@@ -168,26 +168,26 @@ export default function BanNotice() {
 
           {/* Reactivation Information */}
           {isSuspension && canReactivateDate ? (
-            <div className="bg-yellow-950/30 border border-yellow-900/50 rounded-lg p-4">
+            <div className="bg-gradient-to-br from-yellow-900/20 to-yellow-800/20 border border-yellow-700/40 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <Calendar size={18} className="text-yellow-600 mt-0.5" />
+                <Calendar size={18} className="text-yellow-500 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold text-yellow-600 mb-1">
+                  <p className="text-xs font-bold text-yellow-600 uppercase tracking-wider mb-1">
                     Account Reactivation Date
                   </p>
-                  <p className="text-sm text-yellow-600/90">{canReactivateDate}</p>
+                  <p className="text-sm text-yellow-200">{canReactivateDate}</p>
                 </div>
               </div>
             </div>
           ) : isBan ? (
-            <div className="bg-red-950/30 border border-red-900/50 rounded-lg p-4">
+            <div className="bg-gradient-to-br from-red-900/20 to-red-800/20 border border-red-700/40 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <AlertTriangle size={18} className="text-red-600 mt-0.5" />
+                <AlertTriangle size={18} className="text-red-500 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold text-red-600 mb-1">
+                  <p className="text-xs font-bold text-red-600 uppercase tracking-wider mb-1">
                     Permanent Ban
                   </p>
-                  <p className="text-sm text-red-600/90">
+                  <p className="text-sm text-red-200">
                     Your account has been permanently banned. You cannot access
                     this platform or create new accounts.
                   </p>
@@ -197,16 +197,16 @@ export default function BanNotice() {
           ) : null}
 
           {/* Appeal Section */}
-          <div className="bg-gray-950/60 border border-gray-800 rounded-lg p-4">
+          <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <FileText size={18} className="text-gray-500 mt-0.5" />
+              <FileText size={18} className="text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-gray-300 mb-1">
-                  Appeal or Contact Support
+                <p className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-1">
+                  Need Help?
                 </p>
-                <p className="text-sm text-gray-400">
-                  If you believe this decision was made in error, you can submit
-                  an appeal through our support system.
+                <p className="text-sm text-gray-300">
+                  If you believe this decision was made in error, please contact
+                  our support team to submit an appeal.
                 </p>
               </div>
             </div>
