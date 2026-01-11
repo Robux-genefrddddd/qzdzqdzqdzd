@@ -1,17 +1,9 @@
 import { RequestHandler } from "express";
-import { getBytes } from "firebase/storage";
-import { ref } from "firebase/storage";
-import { storage } from "../config/firebase";
-
-interface DownloadRequest {
-  filePath: string;
-  fileName?: string;
-}
 
 /**
  * Proxy endpoint for downloading files from Firebase Storage
  * This bypasses CORS issues by routing through the backend
- * 
+ *
  * Usage: GET /api/download?filePath=assets/assetId/filename.ext&fileName=display-name.ext
  */
 export const handleDownload: RequestHandler = async (req, res) => {
@@ -31,43 +23,57 @@ export const handleDownload: RequestHandler = async (req, res) => {
       });
     }
 
-    console.log(`Downloading file: ${filePath}`);
+    // Encode the path for URL
+    const encodedPath = encodeURIComponent(filePath);
+    const firebaseUrl = `https://firebasestorage.googleapis.com/v0/b/keysystem-d0b86-8df89.firebasestorage.app/o/${encodedPath}?alt=media`;
 
-    // Get file from Firebase Storage
-    const fileRef = ref(storage, filePath);
-    const bytes = await getBytes(fileRef);
+    console.log(`Proxying download: ${filePath}`);
+
+    // Fetch the file from Firebase Storage
+    const response = await fetch(firebaseUrl);
+
+    if (!response.ok) {
+      console.error(`Firebase Storage error: ${response.status} ${response.statusText}`);
+
+      if (response.status === 404) {
+        return res.status(404).json({
+          error: "File not found",
+          code: "OBJECT_NOT_FOUND",
+        });
+      } else if (response.status === 403) {
+        return res.status(403).json({
+          error: "Access denied",
+          code: "UNAUTHORIZED",
+        });
+      }
+
+      return res.status(response.status).json({
+        error: "Firebase Storage error",
+        code: response.status,
+      });
+    }
+
+    // Get file as buffer
+    const buffer = await response.arrayBuffer();
 
     // Set response headers for file download
-    res.setHeader("Content-Type", "application/octet-stream");
+    res.setHeader("Content-Type", response.headers.get("content-type") || "application/octet-stream");
     res.setHeader(
       "Content-Disposition",
       `attachment; filename="${fileName || filePath.split("/").pop() || "file"}"`
     );
-    res.setHeader("Content-Length", bytes.length);
+    res.setHeader("Content-Length", buffer.byteLength);
     res.setHeader("Cache-Control", "public, max-age=3600");
+    res.setHeader("Accept-Ranges", "bytes");
 
     // Send file
-    res.send(bytes);
+    res.send(Buffer.from(buffer));
   } catch (error: any) {
-    console.error("Download error:", error);
-
-    const errorCode = error?.code || "unknown";
-
-    if (errorCode === "storage/object-not-found") {
-      return res.status(404).json({
-        error: "File not found",
-        code: "OBJECT_NOT_FOUND",
-      });
-    } else if (errorCode === "storage/unauthorized") {
-      return res.status(403).json({
-        error: "Access denied",
-        code: "UNAUTHORIZED",
-      });
-    }
+    console.error("Download proxy error:", error);
 
     res.status(500).json({
       error: "Failed to download file",
-      code: errorCode,
+      message: error?.message || "Unknown error",
     });
   }
 };
